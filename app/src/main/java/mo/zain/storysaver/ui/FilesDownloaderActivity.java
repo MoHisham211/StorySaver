@@ -2,12 +2,15 @@ package mo.zain.storysaver.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -41,6 +44,8 @@ import at.huber.youtubeExtractor.YtFile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
+import mo.zain.storysaver.utils.Constants;
+
 @SuppressLint("StaticFieldLeak")
 
 public class FilesDownloaderActivity extends AppCompatActivity {
@@ -114,8 +119,8 @@ public class FilesDownloaderActivity extends AppCompatActivity {
                     textInputLayout.setError("Enter Your Link");
                     return;
                 }else {
-                    String Value=textInputLayout.getEditText().getText().toString().trim();
-                    startDownload(Value);
+                     String Value=textInputLayout.getEditText().getText().toString().trim();
+                     startDownload(Value);
                 }
             }
         });
@@ -135,8 +140,8 @@ public class FilesDownloaderActivity extends AppCompatActivity {
 
                     request.setTitle("Video File");
                     request.setDescription("Downloading");
-                    request.setDestinationInExternalFilesDir(FilesDownloaderActivity.this
-                            , Environment.DIRECTORY_DOWNLOADS, System.currentTimeMillis()+ ".mp4");
+                    request.setDestinationInExternalPublicDir( Constants.App_Diectory
+                            , System.currentTimeMillis()+ ".mp4");
                     request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                     request.setVisibleInDownloadsUi(false);
                     DownloadManager manager = (DownloadManager)
