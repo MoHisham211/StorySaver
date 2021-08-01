@@ -13,20 +13,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
+
 import android.util.SparseArray;
-import android.view.FocusFinder;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.MediaController;
-import android.widget.VideoView;
-
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -122,6 +117,7 @@ public class FilesDownloaderActivity extends AppCompatActivity {
                 }else {
                      String Value=textInputLayout.getEditText().getText().toString().trim();
                      startDownload(Value);
+                    textInputLayout.getEditText().setText("");
                 }
             }
         });
