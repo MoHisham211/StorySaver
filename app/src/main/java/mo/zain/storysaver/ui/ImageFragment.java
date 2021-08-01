@@ -75,7 +75,6 @@ public class ImageFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         return view;
-
     }
 
     @Override
@@ -89,11 +88,11 @@ public class ImageFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
-
         getStatus(lang);
     }
     private void getStatus(String lang)
     {
+        progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("W"))
         {
             if (Constants.Story_Directory.exists())

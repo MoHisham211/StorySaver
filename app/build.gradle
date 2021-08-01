@@ -46,13 +46,13 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     //sdp
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
-    //
+    //FancyToast
     implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.8'
-    //
+    //lottie
     implementation 'com.airbnb.android:lottie:3.7.2'
-    //
+    //youtubeExtractor
     implementation 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
-    //
+    //admob
     implementation 'com.google.android.gms:play-services-ads:20.2.0'
 
 }

@@ -94,6 +94,7 @@ public class VideoFragment extends Fragment {
     }
     private void getStatus(String lang)
     {
+        progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("W"))
         {
             if (Constants.Story_Directory.exists())
