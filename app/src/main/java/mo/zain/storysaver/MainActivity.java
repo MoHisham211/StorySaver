@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolBarMain) Toolbar toolbar;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager2;
-    @BindView(R.id.fileDownload) ImageView imageView;
+    //@BindView(R.id.fileDownload) ImageView imageView;
     Switch simpleSwitch ;
     Boolean Directory=false;
     PagerAdapter pagerAdapter;
@@ -47,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         simpleSwitch=  findViewById(R.id.simpleSwitch);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, FilesDownloaderActivity.class));
-            }
-        });
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, FilesDownloaderActivity.class));
+//            }
+//        });
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
         SharedPreferences sharedPreferences = getSharedPreferences("myKey", MODE_PRIVATE);
         lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        //--> System.exit(0);
+        //super.onBackPressed();
+        //System.exit(0);
+        finish();
     }
 }

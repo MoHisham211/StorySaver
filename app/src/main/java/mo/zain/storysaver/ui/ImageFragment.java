@@ -90,109 +90,75 @@ public class ImageFragment extends Fragment {
 
         getStatus(lang);
     }
-    private void getStatus(String lang)
-    {
+    private void getStatus(String lang) {
         progressBar.setVisibility(View.VISIBLE);
-        if (lang.equals("W"))
-        {
-            if (Constants.Story_Directory.exists())
-            {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File [] statusFiles=Constants.Story_Directory.listFiles();
-                        if (statusFiles!=null &&  statusFiles.length>0)
-                        {
-                            Arrays.sort(statusFiles);
-                            for (final File stutas:statusFiles)
-                            {
-                                StoryModel storyModel=new StoryModel(
-                                        stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
-                                if (!storyModel.isVideo())
-                                {
-                                    models.add(storyModel);
-                                }
+        if (lang.equals("WB")) {
+            if (Constants.Story_DirectoryBusniess.exists()) {
+
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.Story_DirectoryBusniess.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles);
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
                             }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    imageAdapter=new ImageAdapter(models,getContext(),ImageFragment.this);
-                                    recyclerView.setAdapter(imageAdapter);
-                                    imageAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-                                }
-                            });
                         }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
+            }
+        }else if(lang.equals("W")){
+
+            if (Constants.Story_Directory.exists()) {
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.Story_Directory.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles);
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
                     }
                 }).start();
             }
-
-        }else if (lang.equals("WB"))
-        {
-            if (Constants.Story_DirectoryBusniess.exists())
-            {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File [] statusFiles=Constants.Story_DirectoryBusniess.listFiles();
-
-                        if (statusFiles!=null &&  statusFiles.length>0)
-                        {
-                            Arrays.sort(statusFiles);
-                            for (final File stutas:statusFiles)
-                            {
-                                StoryModel storyModel=new StoryModel(
-                                        stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
-                                if (!storyModel.isVideo())
-                                {
-                                    models.add(storyModel);
-                                }
-                            }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    progressBar.setVisibility(View.GONE);
-                                    imageAdapter=new ImageAdapter(models,getContext(),ImageFragment.this);
-                                    recyclerView.setAdapter(imageAdapter);
-                                    imageAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-                                }
-                            });
-                        }
-                    }
-                }).start();
-            }
-
         }
     }
-    private Bitmap getThumbnail(StoryModel storyModel)
-    {
-        if (storyModel.isVideo())
-        {
-            return ThumbnailUtils.createVideoThumbnail(storyModel.getFile().getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
-
-        }else
-            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(storyModel.getFile().getAbsolutePath()),Constants.TBMBSIZE,Constants.TBMBSIZE);
-    }
-
     public void downloadImage(StoryModel storyModel) throws Exception {
 
         File file=new File(Constants.App_Diectory);

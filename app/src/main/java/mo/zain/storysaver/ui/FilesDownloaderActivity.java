@@ -115,9 +115,9 @@ public class FilesDownloaderActivity extends AppCompatActivity {
                     textInputLayout.setError("Enter Your Link");
                     return;
                 }else {
-                     String Value=textInputLayout.getEditText().getText().toString().trim();
-                     startDownload(Value);
-                    textInputLayout.getEditText().setText("");
+                    String Value=textInputLayout.getEditText().getText().toString().trim();
+                    startDownload(Value);
+                   // textInputLayout.getEditText().setText("");
                 }
             }
         });
@@ -126,7 +126,7 @@ public class FilesDownloaderActivity extends AppCompatActivity {
 
 
     private void startDownload(String url) {
-         new YouTubeExtractor(FilesDownloaderActivity.this) {
+        new YouTubeExtractor(FilesDownloaderActivity.this) {
             @Override
             public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
 

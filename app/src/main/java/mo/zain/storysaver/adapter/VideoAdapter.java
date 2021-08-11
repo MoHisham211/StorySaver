@@ -18,6 +18,9 @@ import android.widget.VideoView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,7 +52,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
     public void onBindViewHolder(@NonNull  VideoAdapter.VideoViewHolder holder, int position) {
 
         StoryModel storyModel=videoList.get(position);
-        holder.imageView.setImageBitmap(storyModel.getBitmap());
+//        holder.imageView.setImageBitmap(storyModel.getBitmap());
+        //Picasso.get().load(storyModel.getFile()).into(holder.imageView);
+        Glide.with(context).asBitmap().load(storyModel.getFile()).into(holder.imageView);
+
 
         LayoutInflater inflater = LayoutInflater.from(context);
         final View view1 = inflater.inflate(R.layout.view_video_full_screen, null);
@@ -133,11 +139,6 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
                     }
                 }
             });
-
-
-
-
-
         }
     }
 }

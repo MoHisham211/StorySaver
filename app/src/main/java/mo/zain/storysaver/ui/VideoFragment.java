@@ -103,7 +103,7 @@ public class VideoFragment extends Fragment {
                     @Override
                     public void run() {
                         File[] statusFiles=Constants.Story_Directory.listFiles();
-
+                        models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
                             Arrays.sort(statusFiles);
@@ -111,7 +111,6 @@ public class VideoFragment extends Fragment {
                             {
                                 StoryModel storyModel=new StoryModel(
                                         stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
                                 if (storyModel.isVideo())
                                 {
                                     models.add(storyModel);
@@ -148,7 +147,7 @@ public class VideoFragment extends Fragment {
                     @Override
                     public void run() {
                         File[] statusFiles=Constants.Story_DirectoryBusniess.listFiles();
-
+                        models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
                             Arrays.sort(statusFiles);
@@ -156,7 +155,6 @@ public class VideoFragment extends Fragment {
                             {
                                 StoryModel storyModel=new StoryModel(
                                         stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
                                 if (storyModel.isVideo())
                                 {
                                     models.add(storyModel);
@@ -188,16 +186,6 @@ public class VideoFragment extends Fragment {
         }
 
     }
-    private Bitmap getThumbnail(StoryModel storyModel)
-    {
-        if (storyModel.isVideo())
-        {
-            return ThumbnailUtils.createVideoThumbnail(storyModel.getFile().getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND);
-
-        }else
-            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(storyModel.getFile().getAbsolutePath()),Constants.TBMBSIZE,Constants.TBMBSIZE);
-    }
-
     public void downloadImage(StoryModel storyModel) throws Exception {
 
         File file=new File(Constants.App_Diectory);

@@ -49,7 +49,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull  ImageAdapter.ImageViewHolder holder, int position) {
 
         StoryModel storyModel=imageList.get(position);
-        holder.imageView.setImageBitmap(storyModel.getBitmap());
+        //holder.imageView.setImageBitmap(storyModel.getBitmap());
+        Picasso.get().load(storyModel.getFile()).into(holder.imageView);
         holder.imageView.setOnClickListener(v -> {
 
             final AlertDialog.Builder alertD = new AlertDialog.Builder(context);
