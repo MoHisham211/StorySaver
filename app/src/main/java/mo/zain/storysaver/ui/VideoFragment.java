@@ -53,13 +53,12 @@ public class VideoFragment extends Fragment {
     RecyclerView recyclerView;
     @BindView(R.id.progress)
     ProgressBar progressBar;
-
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     private VideoAdapter videoAdapter;
     private ArrayList<StoryModel> models=new ArrayList<>();
     private Handler handler=new Handler();
     private String lang;
     private SharedPreferences sharedPreferences;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private AdView mAdView;
 
     @Override
@@ -67,6 +66,16 @@ public class VideoFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_video, container, false);
+
+        ButterKnife.bind(this,view);
+
+        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
+        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+
+        getStatus(lang);
 
         MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
@@ -77,20 +86,15 @@ public class VideoFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getStatus(lang);
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+
         return view;
-    }
-    @Override
-    public void onViewCreated(@NonNull  View view, @Nullable  Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
-
-        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
-        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
-        getStatus(lang);
     }
     private void getStatus(String lang)
     {

@@ -8,6 +8,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolBarMain) Toolbar toolbar;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager2;
-    //@BindView(R.id.fileDownload) ImageView imageView;
+    @BindView(R.id.fileDownload) ImageView imageView;
     Switch simpleSwitch ;
     Boolean Directory=false;
     PagerAdapter pagerAdapter;
@@ -47,12 +48,27 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         simpleSwitch=  findViewById(R.id.simpleSwitch);
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, FilesDownloaderActivity.class));
-//            }
-//        });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        "Hey, Check out this Awesome Status Saver app.\nThis app Lets you save WhatsApp Status Images and Videos.\nDownload Now : https://play.google.com/store/apps/details?id=mo.zain.storysaver"
+                );
+                startActivity(Intent.createChooser(shareIntent, "Share!"));
+//                startActivity(
+//                        new Intent(
+//                                Intent.ACTION_VIEW,
+//                                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
+//
+//                        )
+//                );
+
+               // startActivity(new Intent(MainActivity.this, FilesDownloaderActivity.class));
+            }
+        });
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
         SharedPreferences sharedPreferences = getSharedPreferences("myKey", MODE_PRIVATE);
         lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
@@ -92,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager2);
     }
 
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-        //System.exit(0);
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        //super.onBackPressed();
+//        //System.exit(0);
+//        finish();
+//    }
 }

@@ -8,16 +8,21 @@
     android:id="@+id/image_container">
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleViewImage"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/adView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:spanCount="2"
         tools:listitem="@layout/item_status" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

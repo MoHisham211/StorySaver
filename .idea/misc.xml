@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_share.xml" value="0.18125" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_files_downloader.xml" value="0.16510416666666666" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_main.xml" value="0.20555555555555555" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_splash.xml" value="0.17592592592592593" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/fragment_image.xml" value="0.16033519553072625" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/fragment_saved.xml" value="0.2453125" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/fragment_video.xml" value="0.14947916666666666" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/item_saved.xml" value="0.16510416666666666" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/item_status.xml" value="0.20555555555555555" />
       </map>
     </option>

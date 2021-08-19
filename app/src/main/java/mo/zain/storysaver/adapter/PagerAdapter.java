@@ -9,18 +9,21 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.io.File;
 
 import mo.zain.storysaver.ui.ImageFragment;
+import mo.zain.storysaver.ui.SavedFragment;
 import mo.zain.storysaver.ui.VideoFragment;
 
 public class PagerAdapter extends FragmentPagerAdapter {
 
     private ImageFragment imageFragment;
     private VideoFragment videoFragment;
+    private SavedFragment savedFragment;
 
 
     public PagerAdapter(@NonNull  FragmentManager fm) {
         super(fm);
         imageFragment=new ImageFragment();
         videoFragment=new VideoFragment();
+        savedFragment=new SavedFragment();
 
     }
 
@@ -30,9 +33,11 @@ public class PagerAdapter extends FragmentPagerAdapter {
         if (position==0)
         {
             return imageFragment;
-        }else
+        }else if (position==1)
         {
             return videoFragment;
+        }else {
+            return savedFragment;
         }
     }
 
@@ -41,14 +46,17 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         if (position==0){
             return "Images";
-        }else
+        }else if (position==1)
         {
             return "Videos";
+        }else
+        {
+            return "Saved";
         }
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

@@ -40,6 +40,10 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         this.context = context;
         this.videoFragment = videoFragment;
     }
+    public VideoAdapter(List<StoryModel> videoList, Context context){
+        this.videoList = videoList;
+        this.context = context;
+    }
 
     @NonNull
     @Override

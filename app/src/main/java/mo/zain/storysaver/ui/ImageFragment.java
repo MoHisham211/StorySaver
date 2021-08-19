@@ -53,12 +53,12 @@ public class ImageFragment extends Fragment {
 
     @BindView(R.id.recycleViewImage) RecyclerView recyclerView;
     @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     ImageAdapter imageAdapter;
     ArrayList<StoryModel> models=new ArrayList<>();
     Handler handler=new Handler();
     SharedPreferences sharedPreferences;
     private String lang;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private AdView mAdView;
 
     @Override
@@ -66,6 +66,14 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_image, container, false);
+        ButterKnife.bind(this,view);
+        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
+        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        getStatus(lang);
+
         MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -74,21 +82,17 @@ public class ImageFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getStatus(lang);
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
         return view;
-    }
-
-    @Override
-    public void onViewCreated(@NonNull  View view, @Nullable  Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
-
-        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
-        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
-        getStatus(lang);
     }
     private void getStatus(String lang) {
         progressBar.setVisibility(View.VISIBLE);
