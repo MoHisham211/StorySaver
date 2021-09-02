@@ -6,7 +6,7 @@ Saver app for WhatsApp is a small package to save status in gallery.
 Best video status saver app is suitable in latest status video. 
 Best photo and video status downloader without asking to send their status. 
 Status saver app will help you to download Whatsapp status in an easy and fast way. 
-You can also download the most famous cases.
+You can also download the most famous Videos.
 
 # Google play
 https://play.google.com/store/apps/details?id=mo.zain.storysaver
