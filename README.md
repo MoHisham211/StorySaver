@@ -10,4 +10,3 @@ You can also download the most famous Videos.
 
 # Google play
 https://play.google.com/store/apps/details?id=mo.zain.storysaver
-https://youtu.be/bAQmwiRq-ik
