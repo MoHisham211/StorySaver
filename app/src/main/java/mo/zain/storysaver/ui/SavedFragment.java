@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,7 +109,12 @@ public class SavedFragment extends Fragment {
                         models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
-                            Arrays.sort(statusFiles);
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
                             for (final File stutas:statusFiles)
                             {
                                 StoryModel storyModel=new StoryModel(

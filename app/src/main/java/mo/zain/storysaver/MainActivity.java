@@ -3,28 +3,22 @@ package mo.zain.storysaver;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TableLayout;
-import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
-
-import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mo.zain.storysaver.adapter.PagerAdapter;
-import mo.zain.storysaver.ui.FilesDownloaderActivity;
+import mo.zain.storysaver.ui.TopActivity;
 import mo.zain.storysaver.utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.toolBarMain) Toolbar toolbar;
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager2;
-    @BindView(R.id.fileDownload) ImageView imageView;
+    @BindView(R.id.fileShare) ImageView imageView;
+    @BindView(R.id.fileTop) ImageView imageTop;
     Switch simpleSwitch ;
     Boolean Directory=false;
     PagerAdapter pagerAdapter;
@@ -48,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         simpleSwitch=  findViewById(R.id.simpleSwitch);
+        imageTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TopActivity.class));
+            }
+        });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,15 +59,6 @@ public class MainActivity extends AppCompatActivity {
                         "Hey, Check out this Awesome Status Saver app.\nThis app Lets you save WhatsApp Status Images and Videos.\nDownload Now : https://play.google.com/store/apps/details?id=mo.zain.storysaver"
                 );
                 startActivity(Intent.createChooser(shareIntent, "Share!"));
-//                startActivity(
-//                        new Intent(
-//                                Intent.ACTION_VIEW,
-//                                Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-//
-//                        )
-//                );
-
-               // startActivity(new Intent(MainActivity.this, FilesDownloaderActivity.class));
             }
         });
         pagerAdapter=new PagerAdapter(getSupportFragmentManager());
@@ -108,10 +100,4 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager2);
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        //super.onBackPressed();
-//        //System.exit(0);
-//        finish();
-//    }
 }

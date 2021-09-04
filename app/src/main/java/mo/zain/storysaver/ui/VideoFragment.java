@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,16 +102,22 @@ public class VideoFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("W"))
         {
-            if (Constants.Story_Directory.exists())
+            File PathW=new File(Constants.WhatsAppDirectoryPath);
+            if (PathW.exists())
             {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        File[] statusFiles=Constants.Story_Directory.listFiles();
+                        File[] statusFiles=PathW.listFiles();
                         models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
-                            Arrays.sort(statusFiles);
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
                             for (final File stutas:statusFiles)
                             {
                                 StoryModel storyModel=new StoryModel(
@@ -145,16 +152,23 @@ public class VideoFragment extends Fragment {
 
         }else if (lang.equals("WB"))
         {
-            if (Constants.Story_DirectoryBusniess.exists())
+            File PathWB=new File(Constants.BusinessDirectoryPath);
+
+            if (PathWB.exists())
             {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        File[] statusFiles=Constants.Story_DirectoryBusniess.listFiles();
+                        File[] statusFiles=PathWB.listFiles();
                         models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
-                            Arrays.sort(statusFiles);
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
                             for (final File stutas:statusFiles)
                             {
                                 StoryModel storyModel=new StoryModel(

@@ -6,16 +6,19 @@ import java.io.File;
 
 public class Constants {
     public static final File Story_Directory=
-            new File(Environment.getExternalStorageDirectory() +
-                    File.separator + "WhatsApp/Media/.Statuses");
+            new File(Environment.getExternalStorageDirectory() + File.separator + "WhatsApp/Media/.Statuses");
 
     public static final File Story_DirectoryBusniess=
-            new File(Environment.getExternalStorageDirectory() +
-                    File.separator + "WhatsApp Business/Media/.Statuses");
+            new File(Environment.getExternalStorageDirectory() + File.separator + "WhatsApp Business/Media/.Statuses");
 
-    public static final String App_Diectory=Environment.getExternalStorageDirectory()+File.separator+"WhatsAppStorySaver";
+    public static final String App_Diectory=Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"WhatsAppStorySaver";
     public static final int TBMBSIZE=1000;
 
     public static String Dirctory_KEY="Dirctory_KEY";
+
+    public static final String WhatsAppDirectoryPath = "/storage/emulated/0/WhatsApp/Media/.Statuses/";
+    //Next Update i will add GBWhatsApp
+    public static final String GBDirectoryPath = "/storage/emulated/0/GBWhatsApp/Media/.Statuses/";
+    public static final String BusinessDirectoryPath = "/storage/emulated/0/WhatsApp Business/Media/.Statuses/";
 
 }

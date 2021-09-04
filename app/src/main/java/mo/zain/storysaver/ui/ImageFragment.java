@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,14 +98,20 @@ public class ImageFragment extends Fragment {
     private void getStatus(String lang) {
         progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("WB")) {
-            if (Constants.Story_DirectoryBusniess.exists()) {
+            File PathWB=new File(Constants.BusinessDirectoryPath);
+            if (PathWB.exists()) {
 
                 new Thread(() -> {
                     File[] statusFiles;
-                    statusFiles = Constants.Story_DirectoryBusniess.listFiles();
+                    statusFiles = PathWB.listFiles();
                     models.clear();
                     if (statusFiles != null && statusFiles.length > 0) {
-                        Arrays.sort(statusFiles);
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
                         for (File file : statusFiles) {
                             StoryModel storyModel = new StoryModel(
                                     file, file.getName(), file.getAbsolutePath());
@@ -130,14 +137,19 @@ public class ImageFragment extends Fragment {
 
             }
         }else if(lang.equals("W")){
-
-            if (Constants.Story_Directory.exists()) {
+            File PathW=new File(Constants.WhatsAppDirectoryPath);
+            if (PathW.exists()) {
                 new Thread(() -> {
                     File[] statusFiles;
-                    statusFiles = Constants.Story_Directory.listFiles();
+                    statusFiles = PathW.listFiles();
                     models.clear();
                     if (statusFiles != null && statusFiles.length > 0) {
-                        Arrays.sort(statusFiles);
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
                         for (File file : statusFiles) {
                             StoryModel storyModel = new StoryModel(
                                     file, file.getName(), file.getAbsolutePath());
