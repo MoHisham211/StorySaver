@@ -98,12 +98,46 @@ public class ImageFragment extends Fragment {
     private void getStatus(String lang) {
         progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("WB")) {
-            File PathWB=new File(Constants.BusinessDirectoryPath);
-            if (PathWB.exists()) {
+            if (Constants.Story_DirectoryBusniess.exists()) {
 
                 new Thread(() -> {
                     File[] statusFiles;
-                    statusFiles = PathWB.listFiles();
+                    statusFiles = Constants.Story_DirectoryBusniess.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
+            }else if (Constants.STATUS_DIRECTORY_NEW_WB.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.STATUS_DIRECTORY_NEW_WB.listFiles();
                     models.clear();
                     if (statusFiles != null && statusFiles.length > 0) {
                         Arrays.sort(statusFiles, new Comparator<File>() {
@@ -137,11 +171,44 @@ public class ImageFragment extends Fragment {
 
             }
         }else if(lang.equals("W")){
-            File PathW=new File(Constants.WhatsAppDirectoryPath);
-            if (PathW.exists()) {
+            if (Constants.Story_Directory.exists()) {
                 new Thread(() -> {
                     File[] statusFiles;
-                    statusFiles = PathW.listFiles();
+                    statusFiles = Constants.Story_Directory.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+            }else if (Constants.STATUS_DIRECTORY_NEW.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.STATUS_DIRECTORY_NEW.listFiles();
                     models.clear();
                     if (statusFiles != null && statusFiles.length > 0) {
                         Arrays.sort(statusFiles, new Comparator<File>() {

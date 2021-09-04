@@ -10,9 +10,9 @@ android {
     defaultConfig {
         applicationId "mo.zain.storysaver"
         minSdkVersion 16
-        targetSdkVersion 30
-        versionCode 4
-        versionName "1.3"
+        targetSdkVersion 29
+        versionCode 5
+        versionName "1.4"
 
         multiDexEnabled true
 

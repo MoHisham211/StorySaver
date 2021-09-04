@@ -102,13 +102,56 @@ public class VideoFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         if (lang.equals("W"))
         {
-            File PathW=new File(Constants.WhatsAppDirectoryPath);
-            if (PathW.exists())
+            if (Constants.Story_Directory.exists())
             {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        File[] statusFiles=PathW.listFiles();
+                        File[] statusFiles=Constants.Story_Directory.listFiles();
+                        models.clear();
+                        if (statusFiles!=null &&  statusFiles.length>0)
+                        {
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
+                            for (final File stutas:statusFiles)
+                            {
+                                StoryModel storyModel=new StoryModel(
+                                        stutas,stutas.getName(),stutas.getAbsolutePath());
+                                if (storyModel.isVideo())
+                                {
+                                    models.add(storyModel);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    videoAdapter=new VideoAdapter(models,getContext(),VideoFragment.this);
+                                    recyclerView.setAdapter(videoAdapter);
+                                    videoAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }
+                            });
+                        }
+                    }
+                }).start();
+            }else if (Constants.STATUS_DIRECTORY_NEW.exists()){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File[] statusFiles=Constants.STATUS_DIRECTORY_NEW.listFiles();
                         models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
@@ -152,14 +195,57 @@ public class VideoFragment extends Fragment {
 
         }else if (lang.equals("WB"))
         {
-            File PathWB=new File(Constants.BusinessDirectoryPath);
 
-            if (PathWB.exists())
+            if (Constants.Story_DirectoryBusniess.exists())
             {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        File[] statusFiles=PathWB.listFiles();
+                        File[] statusFiles=Constants.Story_DirectoryBusniess.listFiles();
+                        models.clear();
+                        if (statusFiles!=null &&  statusFiles.length>0)
+                        {
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
+                            for (final File stutas:statusFiles)
+                            {
+                                StoryModel storyModel=new StoryModel(
+                                        stutas,stutas.getName(),stutas.getAbsolutePath());
+                                if (storyModel.isVideo())
+                                {
+                                    models.add(storyModel);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    videoAdapter=new VideoAdapter(models,getContext(),VideoFragment.this);
+                                    recyclerView.setAdapter(videoAdapter);
+                                    videoAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }
+                            });
+                        }
+                    }
+                }).start();
+            }else if (Constants.STATUS_DIRECTORY_NEW_WB.exists()){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File[] statusFiles=Constants.STATUS_DIRECTORY_NEW_WB.listFiles();
                         models.clear();
                         if (statusFiles!=null &&  statusFiles.length>0)
                         {
