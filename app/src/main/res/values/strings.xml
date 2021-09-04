@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Status Saver</string>
+    <string name="popular_videos" translatable="false">Popular Videos</string>
+    <string name="images_tap" translatable="false">Images</string>
+    <string name="videos_tap" translatable="false">Videos</string>
+    <string name="saved_tap" translatable="false">Saved</string>
 </resources>

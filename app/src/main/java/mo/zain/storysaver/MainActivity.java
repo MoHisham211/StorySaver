@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(shareIntent, "Share!"));
             }
         });
-        pagerAdapter=new PagerAdapter(getSupportFragmentManager());
+        pagerAdapter=new PagerAdapter(getSupportFragmentManager(),MainActivity.this);
         SharedPreferences sharedPreferences = getSharedPreferences("myKey", MODE_PRIVATE);
         lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
         if (lang.equals("W"))
