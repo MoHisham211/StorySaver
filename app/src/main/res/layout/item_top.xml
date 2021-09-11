@@ -49,7 +49,7 @@
             android:id="@+id/imageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_save_file"
+            android:src="@drawable/download_import_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="VectorDrawableCompat,SpeakableTextPresentCheck" />

@@ -2,6 +2,7 @@ package mo.zain.storysaver.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -59,6 +60,16 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 //        holder.imageView.setImageBitmap(storyModel.getBitmap());
         //Picasso.get().load(storyModel.getFile()).into(holder.imageView);
         Glide.with(context).asBitmap().load(storyModel.getFile()).into(holder.imageView);
+        holder.imageButtonShar.setOnClickListener(v -> {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("video/");
+            shareIntent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    Uri.parse(storyModel.getPath())
+            );
+            context.startActivity(Intent.createChooser(shareIntent, "Share!"));
+        });
+
 
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -125,10 +136,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         ImageButton imageButton;
         @BindView(R.id.image)
         ImageView imageView;
+        @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
+            imageButton.getBackground().setAlpha(175);
+            imageButtonShar.getBackground().setAlpha(175);
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

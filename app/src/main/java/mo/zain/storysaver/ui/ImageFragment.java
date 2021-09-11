@@ -169,6 +169,40 @@ public class ImageFragment extends Fragment {
                     }
                 }).start();
 
+            }else if (Constants.BusinessDirectoryPath.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.BusinessDirectoryPath.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
             }
         }else if(lang.equals("W")){
             if (Constants.Story_Directory.exists()) {
@@ -239,6 +273,42 @@ public class ImageFragment extends Fragment {
 
                     }
                 }).start();
+            }else if (Constants.WhatsAppDirectoryPath.exists())
+            {
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.WhatsAppDirectoryPath.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
             }
         }
     }

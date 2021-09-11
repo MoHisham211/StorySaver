@@ -11,8 +11,8 @@ android {
         applicationId "mo.zain.storysaver"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 6
-        versionName "1.5"
+        versionCode 8
+        versionName "1.7"
 
         multiDexEnabled true
 

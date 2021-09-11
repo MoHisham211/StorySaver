@@ -21,9 +21,9 @@ public class Constants {
 
     public static String Dirctory_KEY="Dirctory_KEY";
 
-//    public static final String WhatsAppDirectoryPath = "/storage/emulated/0/WhatsApp/Media/.Statuses/";
-//    //Next Update i will add GBWhatsApp
-//    public static final String GBDirectoryPath = "/storage/emulated/0/GBWhatsApp/Media/.Statuses/";
-//    public static final String BusinessDirectoryPath = "/storage/emulated/0/WhatsApp Business/Media/.Statuses/";
+    public static final File WhatsAppDirectoryPath = new File("/storage/emulated/0/WhatsApp/Media/.Statuses/");
+    //Next Update i will add GBWhatsApp
+    public static final File GBDirectoryPath = new File("/storage/emulated/0/GBWhatsApp/Media/.Statuses/");
+    public static final File BusinessDirectoryPath = new File("/storage/emulated/0/WhatsApp Business/Media/.Statuses/");
 
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Status Saver</string>
+    <string name="app_name">Save Status</string>
     <string name="popular_videos" translatable="false">Popular Videos</string>
     <string name="images_tap" translatable="false">Images</string>
     <string name="videos_tap" translatable="false">Videos</string>

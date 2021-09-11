@@ -191,6 +191,51 @@ public class VideoFragment extends Fragment {
                         }
                     }
                 }).start();
+            }else if (Constants.WhatsAppDirectoryPath.exists()){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File[] statusFiles=Constants.WhatsAppDirectoryPath.listFiles();
+                        models.clear();
+                        if (statusFiles!=null &&  statusFiles.length>0)
+                        {
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
+                            for (final File stutas:statusFiles)
+                            {
+                                StoryModel storyModel=new StoryModel(
+                                        stutas,stutas.getName(),stutas.getAbsolutePath());
+                                if (storyModel.isVideo())
+                                {
+                                    models.add(storyModel);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    videoAdapter=new VideoAdapter(models,getContext(),VideoFragment.this);
+                                    recyclerView.setAdapter(videoAdapter);
+                                    videoAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }
+                            });
+                        }
+                    }
+                }).start();
+
             }
 
         }else if (lang.equals("WB"))
@@ -285,6 +330,51 @@ public class VideoFragment extends Fragment {
                         }
                     }
                 }).start();
+            }else if (Constants.BusinessDirectoryPath.exists()){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        File[] statusFiles=Constants.BusinessDirectoryPath.listFiles();
+                        models.clear();
+                        if (statusFiles!=null &&  statusFiles.length>0)
+                        {
+                            Arrays.sort(statusFiles, new Comparator<File>() {
+                                @Override
+                                public int compare(File o1, File o2) {
+                                    return Long.compare(o2.lastModified(), o1.lastModified());
+                                }
+                            });
+                            for (final File stutas:statusFiles)
+                            {
+                                StoryModel storyModel=new StoryModel(
+                                        stutas,stutas.getName(),stutas.getAbsolutePath());
+                                if (storyModel.isVideo())
+                                {
+                                    models.add(storyModel);
+                                }
+                            }
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    progressBar.setVisibility(View.GONE);
+                                    videoAdapter=new VideoAdapter(models,getContext(),VideoFragment.this);
+                                    recyclerView.setAdapter(videoAdapter);
+                                    videoAdapter.notifyDataSetChanged();
+                                }
+                            });
+                        }else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.GONE);
+                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+                                }
+                            });
+                        }
+                    }
+                }).start();
+
             }
 
         }

@@ -3,9 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/arrow_download_save_guardar_icon.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/download_import_icon.xml" value="0.2712820512820513" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_back.xml" value="0.17760416666666667" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_baseline_slow_motion_video_24.xml" value="0.1421875" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_file.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_internet.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2712820512820513" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_save_file.xml" value="0.2712820512820513" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_share.xml" value="0.18125" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_share11.xml" value="0.2712820512820513" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/ic_top_games_star.xml" value="0.25925925925925924" />
+        <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/drawable/shap_button.xml" value="0.2712820512820513" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_files_downloader.xml" value="0.16510416666666666" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_main.xml" value="0.20555555555555555" />
         <entry key="..\:/AndroidProjects/StorySaver/app/src/main/res/layout/activity_permession.xml" value="0.259375" />

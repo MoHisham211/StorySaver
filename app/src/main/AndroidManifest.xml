@@ -24,11 +24,6 @@
             android:name=".PermessionActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.FilesDownloaderActivity"
-            android:theme="@style/matrail">
-
-        </activity>
-        <activity
             android:name=".SplashActivity"
             android:theme="@style/Full">
             <intent-filter>
