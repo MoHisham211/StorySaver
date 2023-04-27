@@ -2,7 +2,7 @@ package mo.zain.storysaver.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -14,13 +14,20 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -28,53 +35,49 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.model.StoryModel;
-import mo.zain.storysaver.ui.VideoFragment;
+import mo.zain.storysaver.model.TopModel;
+import mo.zain.storysaver.ui.TopActivity;
 
-public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
+public class TopAdapter extends RecyclerView.Adapter<TopAdapter.ViewHolder> {
 
-    private final List<StoryModel> videoList;
-    Context context;
-    VideoFragment videoFragment;
+    private List<TopModel> topModels;
+    private Context context;
+    private TopActivity topActivity;
 
-    public VideoAdapter(List<StoryModel> videoList, Context context, VideoFragment videoFragment) {
-        this.videoList = videoList;
+    public TopAdapter(List<TopModel> topModels, Context context, TopActivity topActivity) {
+        this.topModels = topModels;
         this.context = context;
-        this.videoFragment = videoFragment;
-    }
-    public VideoAdapter(List<StoryModel> videoList, Context context){
-        this.videoList = videoList;
-        this.context = context;
+        this.topActivity = topActivity;
     }
 
     @NonNull
     @Override
-    public VideoViewHolder onCreateViewHolder(@NonNull  ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(context).inflate(R.layout.item_status,parent,false);
-        return new VideoViewHolder(view);
+    public TopAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_top,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull  VideoAdapter.VideoViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull TopAdapter.ViewHolder holder, int position) {
+        TopModel topModel=topModels.get(position);
+        holder.progressBar.setVisibility(View.VISIBLE);
+        Glide.with(context).asBitmap().load(topModel.getVedio())
+                .listener(new RequestListener<Bitmap>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Bitmap> target, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
 
-        StoryModel storyModel=videoList.get(position);
-//        holder.imageView.setImageBitmap(storyModel.getBitmap());
-        //Picasso.get().load(storyModel.getFile()).into(holder.imageView);
-        Glide.with(context).asBitmap().load(storyModel.getFile()).into(holder.imageView);
-        holder.imageButtonShar.setOnClickListener(v -> {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("video/");
-            shareIntent.putExtra(
-                    Intent.EXTRA_STREAM,
-                    Uri.parse(storyModel.getPath())
-            );
-            context.startActivity(Intent.createChooser(shareIntent, "Share!"));
-        });
-
-
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, Object model, Target<Bitmap> target, DataSource dataSource, boolean isFirstResource) {
+                        holder.progressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                }).into(holder.imageView);
+        holder.textView.setText(topModel.getName());
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        final View view1 = inflater.inflate(R.layout.view_video_full_screen, null);
-
+        final View view1 = inflater.inflate(R.layout.view_video_top_screen, null);
 
         holder.imageView.setOnClickListener(v -> {
 
@@ -89,6 +92,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             alertDg.setView(view1);
 
             final VideoView videoView = view1.findViewById(R.id.video_full);
+            final ProgressBar progressBar=view1.findViewById(R.id.proBBar);
 
             final MediaController mediaController = new MediaController(context, false);
 
@@ -96,12 +100,15 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
                 mp.start();
                 mediaController.show(0);
+                progressBar.setVisibility(View.GONE);
                 mp.setLooping(true);
             });
 
-            videoView.setMediaController(mediaController);
+            Uri video = Uri.parse(topModel.getVedio().toString().trim());
+
+            videoView.setVideoURI(video);
             mediaController.setMediaPlayer(videoView);
-            videoView.setVideoURI(Uri.fromFile(storyModel.getFile()));
+            videoView.setMediaController(mediaController);
             videoView.requestFocus();
 
             ((ViewGroup) mediaController.getParent()).removeView(mediaController);
@@ -122,40 +129,43 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
         });
 
-
     }
 
     @Override
     public int getItemCount() {
-        return videoList.size();
+        return topModels.size();
     }
 
-
-    public class VideoViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.imageButton)
-        ImageButton imageButton;
+    public class ViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.image)
         ImageView imageView;
-        @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
-        public VideoViewHolder(@NonNull View itemView) {
+        @BindView(R.id.title)
+        TextView textView;
+        @BindView(R.id.imageButton)
+        ImageButton imageButton;
+        @BindView(R.id.proBar)
+        ProgressBar progressBar;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            imageButton.getBackground().setAlpha(175);
-            imageButtonShar.getBackground().setAlpha(175);
+
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    StoryModel storyModel=videoList.get(getAdapterPosition());
-                    if (storyModel!=null)
+                    TopModel topModel=topModels.get(getAdapterPosition());
+                    if (topModel!=null)
                     {
                         try {
-                            videoFragment.downloadImage(storyModel);
+                            topActivity.downloadVideo(topModel);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
             });
+
+
         }
     }
 }

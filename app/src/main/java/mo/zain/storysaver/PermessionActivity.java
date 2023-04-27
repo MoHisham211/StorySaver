@@ -10,27 +10,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 
 import java.util.Objects;
 
 public class PermessionActivity extends AppCompatActivity {
-
-
     private static final int REQUEST_PERMISSIONS = 1234;
     private static final String[] PERMISSIONS = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final String MANAGE_EXTERNAL_STORAGE_PERMISSION = "android:manage_external_storage";
-
-    //private final Handler handler = new Handler(Looper.getMainLooper());
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(R.layout.activity_permession);
 
         if (!arePermissionDenied()) {
             next();
@@ -66,15 +59,9 @@ public class PermessionActivity extends AppCompatActivity {
             }
         }
     }
-
     private void next() {
-
         startActivity(new Intent(PermessionActivity.this, MainActivity.class));
         finish();
-//        handler.postDelayed(() -> {
-//
-//        }, 1000);
-
     }
 
     private boolean arePermissionDenied() {

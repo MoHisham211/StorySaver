@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">حفظ حالة الواتس اب</string>
+    <string name="popular_videos" translatable="false">اشهر الفيديوهات</string>
+    <string name="images_tap" translatable="false">الصور</string>
+    <string name="videos_tap" translatable="false">الفيديوهات</string>
+    <string name="saved_tap" translatable="false">الحافظة</string>
+</resources>

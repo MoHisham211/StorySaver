@@ -2,8 +2,10 @@ package mo.zain.storysaver.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +51,18 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     public void onBindViewHolder(@NonNull  ImageAdapter.ImageViewHolder holder, int position) {
 
         StoryModel storyModel=imageList.get(position);
-        holder.imageView.setImageBitmap(storyModel.getBitmap());
+        //holder.imageView.setImageBitmap(storyModel.getBitmap());
+        Picasso.get().load(storyModel.getFile()).into(holder.imageView);
+        holder.imageButtonShar.setOnClickListener(v -> {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/");
+            shareIntent.putExtra(
+                    Intent.EXTRA_STREAM,
+                    Uri.parse(storyModel.getPath())
+            );
+            context.startActivity(Intent.createChooser(shareIntent, "Share!"));
+        });
+
         holder.imageView.setOnClickListener(v -> {
 
             final AlertDialog.Builder alertD = new AlertDialog.Builder(context);
@@ -80,10 +93,12 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             RecyclerView.ViewHolder{
         @BindView(R.id.imageButton) ImageButton imageButton;
         @BindView(R.id.image) ImageView imageView;
+        @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-
+            imageButton.getBackground().setAlpha(175);
+            imageButtonShar.getBackground().setAlpha(175);
             imageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

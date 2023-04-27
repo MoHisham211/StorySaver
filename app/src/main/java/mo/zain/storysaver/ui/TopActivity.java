@@ -2,26 +2,20 @@ package mo.zain.storysaver.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-
-import android.os.Handler;
-import android.support.annotation.Nullable;
-
-import android.util.SparseArray;
-
+import android.os.Environment;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -30,36 +24,45 @@ import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.google.android.material.textfield.TextInputLayout;
+import com.shashank.sony.fancytoastlib.FancyToast;
 
-import java.util.Arrays;
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
-import at.huber.youtubeExtractor.VideoMeta;
-import at.huber.youtubeExtractor.YouTubeExtractor;
-import at.huber.youtubeExtractor.YouTubeUriExtractor;
-import at.huber.youtubeExtractor.YtFile;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
+import mo.zain.storysaver.adapter.ApiClient;
+import mo.zain.storysaver.adapter.TopAdapter;
+import mo.zain.storysaver.model.TopModel;
 import mo.zain.storysaver.utils.Constants;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-@SuppressLint("StaticFieldLeak")
+public class TopActivity extends AppCompatActivity {
 
-public class FilesDownloaderActivity extends AppCompatActivity {
 
-    @BindView(R.id.back) ImageView imageView;
-    @BindView(R.id.downloadBtn) Button button;
-    @BindView(R.id.UrlID) TextInputLayout textInputLayout;
-    private Handler handler=new Handler();
+    private List<TopModel> list=new ArrayList<>();
+    private ProgressBar progressBar;
+    private TopAdapter topAdapter;
+    private RecyclerView recyclerView;
+    private ImageView imageView;
     private RewardedAd mRewardedAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_files_downloader);
-        ButterKnife.bind(this);
+        setContentView(R.layout.activity_top);
+        progressBar=findViewById(R.id.progress);
+        recyclerView=findViewById(R.id.rv);
+        imageView=findViewById(R.id.back);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new
+                GridLayoutManager(TopActivity.this,2));
+        //ca-app-pub-3940256099942544/5224354917
         AdRequest adRequest = new AdRequest.Builder().build();
-        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+        RewardedAd.load(this, "ca-app-pub-6018763248917274/3989027228",
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
@@ -71,12 +74,12 @@ public class FilesDownloaderActivity extends AppCompatActivity {
                         mRewardedAd = rewardedAd;
                     }
                 });
-
+        //
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mRewardedAd != null) {
-                    Activity activityContext = FilesDownloaderActivity.this;
+                    Activity activityContext = TopActivity.this;
                     mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
                         @Override
                         public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
@@ -105,60 +108,73 @@ public class FilesDownloaderActivity extends AppCompatActivity {
                 }
             }
         });
-        button.setOnClickListener(new View.OnClickListener() {
+
+        getAllTopVideos();
+    }
+    public void getAllTopVideos()
+    {
+        progressBar.setVisibility(View.VISIBLE);
+        Call<List<TopModel>> listCall= ApiClient.getApiInterface().getTop();
+        listCall.enqueue(new Callback<List<TopModel>>() {
             @Override
-            public void onClick(View v) {
-                if (textInputLayout.getEditText()
-                        .getText().toString().equals(""))
+            public void onResponse(Call<List<TopModel>> call, Response<List<TopModel>> response) {
+
+                if (response.isSuccessful())
                 {
-                    textInputLayout.setErrorEnabled(true);
-                    textInputLayout.setError("Enter Your Link");
-                    return;
-                }else {
-                     String Value=textInputLayout.getEditText().getText().toString().trim();
-                     startDownload(Value);
-                    textInputLayout.getEditText().setText("");
+
+                    list=response.body();
+                    topAdapter=new TopAdapter(list,TopActivity.this,TopActivity.this);
+                    recyclerView.setAdapter(topAdapter);
+                    progressBar.setVisibility(View.GONE);
+
+                }else
+                {
+                    progressBar.setVisibility(View.GONE);
+                    FancyToast.makeText(TopActivity.this, "Error happen please try again..", Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<List<TopModel>> call, Throwable t) {
+                progressBar.setVisibility(View.GONE);
+                FancyToast.makeText(TopActivity.this, ""+t.getLocalizedMessage(), Toast.LENGTH_SHORT,FancyToast.ERROR,false).show();
+
             }
         });
     }
 
+    public void downloadVideo(TopModel topModel) {
 
 
-    private void startDownload(String url) {
-         new YouTubeExtractor(FilesDownloaderActivity.this) {
-            @Override
-            public void onExtractionComplete(SparseArray<YtFile> ytFiles, VideoMeta vMeta) {
 
-                if (ytFiles != null) {
-                    int itag = 18;
-                    String downloadUrl = ytFiles.get(itag).getUrl();
-                    DownloadManager.Request request = new DownloadManager
-                            .Request(Uri.parse(downloadUrl));
+        File file=new File(Constants.App_Diectory);
+        if (!file.exists())
+        {
+            file.mkdirs();
+        }
+        String url=topModel.getVedio();
 
-                    request.setTitle("Video File");
-                    request.setDescription("Downloading");
-                    request.setDestinationInExternalPublicDir( Constants.App_Diectory
-                            , System.currentTimeMillis()+ ".mp4");
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    request.setVisibleInDownloadsUi(false);
-                    DownloadManager manager = (DownloadManager)
-                            getSystemService(Context.DOWNLOAD_SERVICE);
-                    request.allowScanningByMediaScanner();
-                    request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI
-                            | DownloadManager.Request.NETWORK_MOBILE);
-                    if (manager != null) {
-                        manager.enqueue(request);
-                    }
-                }
-            }
-        }.extract(url, true, true);
+        DownloadManager.Request request=new DownloadManager.Request(Uri.parse(url));
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE |DownloadManager.Request.NETWORK_WIFI);
+
+        request.setTitle("Download");
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS
+                ,System.currentTimeMillis()+".mp4");
+        request.setVisibleInDownloadsUi(false);
+
+        DownloadManager manager=(DownloadManager) getSystemService(Context.DOWNLOAD_SERVICE);
+        if (manager != null) {
+            FancyToast.makeText(getApplication(), "Start Downloading !!", FancyToast.LENGTH_SHORT,FancyToast.INFO,false).show();
+            manager.enqueue(request);
+        }
 
     }
     @Override
     public void onBackPressed() {
         if (mRewardedAd != null) {
-            Activity activityContext = FilesDownloaderActivity.this;
+            Activity activityContext = TopActivity.this;
             mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
@@ -199,4 +215,6 @@ public class FilesDownloaderActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

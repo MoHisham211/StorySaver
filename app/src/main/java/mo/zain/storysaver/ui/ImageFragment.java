@@ -38,6 +38,7 @@ import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,12 +54,12 @@ public class ImageFragment extends Fragment {
 
     @BindView(R.id.recycleViewImage) RecyclerView recyclerView;
     @BindView(R.id.progress) ProgressBar progressBar;
+    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
     ImageAdapter imageAdapter;
     ArrayList<StoryModel> models=new ArrayList<>();
     Handler handler=new Handler();
     SharedPreferences sharedPreferences;
     private String lang;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private AdView mAdView;
 
     @Override
@@ -66,6 +67,14 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_image, container, false);
+        ButterKnife.bind(this,view);
+        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
+        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
+        getStatus(lang);
+
         MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -74,125 +83,235 @@ public class ImageFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getStatus(lang);
+                swipeRefreshLayout.setRefreshing(false);
+
+            }
+        });
+
         return view;
     }
-
-    @Override
-    public void onViewCreated(@NonNull  View view, @Nullable  Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this,view);
-
-        sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
-        lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
-
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
-
-        getStatus(lang);
-    }
-    private void getStatus(String lang)
-    {
+    private void getStatus(String lang) {
         progressBar.setVisibility(View.VISIBLE);
-        if (lang.equals("W"))
-        {
-            if (Constants.Story_Directory.exists())
-            {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File [] statusFiles=Constants.Story_Directory.listFiles();
-                        if (statusFiles!=null &&  statusFiles.length>0)
-                        {
-                            Arrays.sort(statusFiles);
-                            for (final File stutas:statusFiles)
-                            {
-                                StoryModel storyModel=new StoryModel(
-                                        stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
-                                if (!storyModel.isVideo())
-                                {
-                                    models.add(storyModel);
-                                }
+        if (lang.equals("WB")) {
+            if (Constants.Story_DirectoryBusniess.exists()) {
+
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.Story_DirectoryBusniess.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
                             }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    imageAdapter=new ImageAdapter(models,getContext(),ImageFragment.this);
-                                    recyclerView.setAdapter(imageAdapter);
-                                    imageAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-                                }
-                            });
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
                         }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
+            }else if (Constants.STATUS_DIRECTORY_NEW_WB.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.STATUS_DIRECTORY_NEW_WB.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
+            }else if (Constants.BusinessDirectoryPath.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.BusinessDirectoryPath.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
                     }
                 }).start();
             }
-
-        }else if (lang.equals("WB"))
-        {
-            if (Constants.Story_DirectoryBusniess.exists())
-            {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        File [] statusFiles=Constants.Story_DirectoryBusniess.listFiles();
-
-                        if (statusFiles!=null &&  statusFiles.length>0)
-                        {
-                            Arrays.sort(statusFiles);
-                            for (final File stutas:statusFiles)
-                            {
-                                StoryModel storyModel=new StoryModel(
-                                        stutas,stutas.getName(),stutas.getAbsolutePath());
-                                storyModel.setBitmap(getThumbnail(storyModel));
-                                if (!storyModel.isVideo())
-                                {
-                                    models.add(storyModel);
-                                }
+        }else if(lang.equals("W")){
+            if (Constants.Story_Directory.exists()) {
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.Story_Directory.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
                             }
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    progressBar.setVisibility(View.GONE);
-                                    imageAdapter=new ImageAdapter(models,getContext(),ImageFragment.this);
-                                    recyclerView.setAdapter(imageAdapter);
-                                    imageAdapter.notifyDataSetChanged();
-                                }
-                            });
-                        }else {
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT,FancyToast.ERROR,false).show();
-                                }
-                            });
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
                         }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
                     }
                 }).start();
-            }
+            }else if (Constants.STATUS_DIRECTORY_NEW.exists()){
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.STATUS_DIRECTORY_NEW.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
 
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+            }else if (Constants.WhatsAppDirectoryPath.exists())
+            {
+                new Thread(() -> {
+                    File[] statusFiles;
+                    statusFiles = Constants.WhatsAppDirectoryPath.listFiles();
+                    models.clear();
+                    if (statusFiles != null && statusFiles.length > 0) {
+                        Arrays.sort(statusFiles, new Comparator<File>() {
+                            @Override
+                            public int compare(File o1, File o2) {
+                                return Long.compare(o2.lastModified(), o1.lastModified());
+                            }
+                        });
+                        for (File file : statusFiles) {
+                            StoryModel storyModel = new StoryModel(
+                                    file, file.getName(), file.getAbsolutePath());
+                            if (!storyModel.isVideo() && storyModel.getTitle().endsWith(".jpg")) {
+                                models.add(storyModel);
+                            }
+                        }
+                        handler.post(() -> {
+                            imageAdapter = new ImageAdapter(models, getContext(), ImageFragment.this);
+                            recyclerView.setAdapter(imageAdapter);
+                            imageAdapter.notifyDataSetChanged();
+                            progressBar.setVisibility(View.GONE);
+                        });
+
+                    } else {
+                        handler.post(() -> {
+                            progressBar.setVisibility(View.GONE);
+                            FancyToast.makeText(getActivity(), "Directory doesn't exist", FancyToast.LENGTH_SHORT, FancyToast.ERROR, false).show();
+                        });
+
+                    }
+                }).start();
+
+            }
         }
     }
-    private Bitmap getThumbnail(StoryModel storyModel)
-    {
-        if (storyModel.isVideo())
-        {
-            return ThumbnailUtils.createVideoThumbnail(storyModel.getFile().getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND);
-
-        }else
-            return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(storyModel.getFile().getAbsolutePath()),Constants.TBMBSIZE,Constants.TBMBSIZE);
-    }
-
     public void downloadImage(StoryModel storyModel) throws Exception {
 
         File file=new File(Constants.App_Diectory);
