@@ -69,6 +69,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
             );
             context.startActivity(Intent.createChooser(shareIntent, "Share!"));
         });
+        holder.isVideo.setVisibility(View.VISIBLE);
 
 
 
@@ -136,10 +137,13 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
         ImageButton imageButton;
         @BindView(R.id.image)
         ImageView imageView;
+        @BindView(R.id.isVideo)
+        ImageView isVideo;
         @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
             imageButton.getBackground().setAlpha(175);
             imageButtonShar.getBackground().setAlpha(175);
             imageButton.setOnClickListener(new View.OnClickListener() {

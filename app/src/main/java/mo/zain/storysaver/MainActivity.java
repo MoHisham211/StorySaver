@@ -28,7 +28,6 @@ import com.google.android.material.tabs.TabLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import mo.zain.storysaver.adapter.PagerAdapter;
-import mo.zain.storysaver.ui.TopActivity;
 import mo.zain.storysaver.utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabLayout) TabLayout tabLayout;
     @BindView(R.id.viewPager) ViewPager viewPager2;
     @BindView(R.id.fileShare) ImageView imageView;
-    @BindView(R.id.fileTop) ImageView imageTop;
+//    @BindView(R.id.fileTop) ImageView imageTop;
     Switch simpleSwitch ;
     Boolean Directory=false;
     PagerAdapter pagerAdapter;
@@ -66,12 +65,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         simpleSwitch=  findViewById(R.id.simpleSwitch);
-        imageTop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TopActivity.class));
-            }
-        });
+//        imageTop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, TopActivity.class));
+//            }
+//        });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -166,4 +165,5 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
+
 }

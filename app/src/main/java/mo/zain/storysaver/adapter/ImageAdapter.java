@@ -81,6 +81,8 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
         });
 
+        holder.isVideo.setVisibility(View.GONE);
+
 
     }
 
@@ -93,6 +95,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
             RecyclerView.ViewHolder{
         @BindView(R.id.imageButton) ImageButton imageButton;
         @BindView(R.id.image) ImageView imageView;
+        @BindView(R.id.isVideo) ImageView isVideo;
         @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
