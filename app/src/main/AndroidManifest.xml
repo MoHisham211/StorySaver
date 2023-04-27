@@ -19,16 +19,13 @@
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true">
         <activity
-            android:name=".ui.TopActivity"
-            android:exported="true"
-            android:hardwareAccelerated="true"/>
-        <activity
             android:name=".PermessionActivity"
             android:exported="true" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/Full"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
