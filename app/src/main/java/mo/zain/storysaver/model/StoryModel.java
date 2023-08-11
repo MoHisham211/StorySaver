@@ -2,24 +2,34 @@ package mo.zain.storysaver.model;
 
 import android.graphics.Bitmap;
 
+import androidx.documentfile.provider.DocumentFile;
+
 import java.io.File;
+import java.util.Objects;
 
 public class StoryModel {
 
     private static final String MP4=".mp4";
 
-    private final File file;
+    private  File file;
     private Bitmap bitmap;
-    private final String title,path;
-    private boolean isVideo;
-
-
+    private  String title,path;
+    private boolean isVideo,isApi30;
+    DocumentFile documentFile;
 
     public StoryModel(File file, String title, String path) {
         this.file = file;
         this.title = title;
         this.path = path;
+        this.isApi30=false;
         this.isVideo=file.getName().endsWith(MP4);
+    }
+
+    public StoryModel(DocumentFile documentFile) {
+        this.isApi30=true;
+        this.documentFile = documentFile;
+        String MP4 = ".mp4";
+        this.isVideo = Objects.requireNonNull(documentFile.getName()).endsWith(MP4);
     }
 
     public File getFile() {
@@ -48,5 +58,19 @@ public class StoryModel {
 
     public void setVideo(boolean video) {
         isVideo = video;
+    }
+    public DocumentFile getDocumentFile() {
+        return documentFile;
+    }
+    public void setDocumentFile(DocumentFile documentFile) {
+        this.documentFile = documentFile;
+    }
+
+    public boolean isApi30() {
+        return isApi30;
+    }
+
+    public void setApi30(boolean api30) {
+        isApi30 = api30;
     }
 }

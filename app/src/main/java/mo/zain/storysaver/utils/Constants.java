@@ -12,7 +12,7 @@ public class Constants {
             new File(Environment.getExternalStorageDirectory() + File.separator + "WhatsApp Business/Media/.Statuses");
 
     public static final File STATUS_DIRECTORY_NEW = new File(Environment.getExternalStorageDirectory() +
-            File.separator + "Android/media/com.whatsapp/WhatsApp/Media/.Statuses");
+            File.separator + "/Android/media/com.whatsapp/WhatsApp/Media/.Statuses");
     public static final File STATUS_DIRECTORY_NEW_WB = new File(Environment.getExternalStorageDirectory() +
             File.separator + "Android/media/com.WhatsApp Business/WhatsApp Business/Media/.Statuses");
 
