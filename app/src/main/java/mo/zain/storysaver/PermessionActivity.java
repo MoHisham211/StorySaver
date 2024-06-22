@@ -30,7 +30,7 @@ public class PermessionActivity extends AppCompatActivity {
             return;
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermissionDenied()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && arePermissionDenied()) {
 
             requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
         }

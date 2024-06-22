@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
@@ -19,11 +20,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.storage.StorageManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.rewarded.RewardedAd;
 
 import java.util.Objects;
 
+@SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
 
     private static final int REQUEST_PERMISSIONS = 1234;
@@ -49,8 +52,9 @@ public class SplashActivity extends AppCompatActivity {
                             data.getData(),
                             Intent.FLAG_GRANT_READ_URI_PERMISSION |
                                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    next();
 
+                    Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+                    //next();
                 }
             }
     );
@@ -70,6 +74,7 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
+        //Test || here
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermissionDenied()) {
 
             // If Android 10+
