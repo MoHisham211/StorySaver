@@ -15,42 +15,40 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.rewarded.RewardItem;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
+
 import com.google.android.material.tabs.TabLayout;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import mo.zain.storysaver.adapter.PagerAdapter;
 import mo.zain.storysaver.utils.Constants;
 
 public class MainActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.toolBarMain) Toolbar toolbar;
-    @BindView(R.id.tabLayout) TabLayout tabLayout;
-    @BindView(R.id.viewPager) ViewPager viewPager2;
-    @BindView(R.id.fileShare) ImageView imageView;
+  Toolbar toolbar;
+ TabLayout tabLayout;
+ ViewPager viewPager2;
+ ImageView imageView;
 //    @BindView(R.id.fileTop) ImageView imageTop;
     Switch simpleSwitch ;
     Boolean Directory=false;
     PagerAdapter pagerAdapter;
     private SharedPreferences sharedPref;
     String lang;
-    private RewardedAd mRewardedAd;
+    //private RewardedAd mRewardedAd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        RewardedAd.load(this, "ca-app-pub-6018763248917274/8764479204",
+
+
+         toolbar=findViewById(R.id.toolBarMain) ;
+         tabLayout=findViewById(R.id.tabLayout) ;
+          viewPager2=findViewById(R.id.viewPager);
+          imageView=findViewById(R.id.fileShare);
+
+       // AdRequest adRequest = new AdRequest.Builder().build();
+        /*RewardedAd.load(this, "ca-app-pub-6018763248917274/8764479204",
                 adRequest, new RewardedAdLoadCallback() {
                     @Override
                     public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
@@ -62,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                         mRewardedAd = rewardedAd;
                     }
                 });
+
+         */
         setSupportActionBar(toolbar);
         toolbar.setTitleTextColor(Color.WHITE);
         simpleSwitch=  findViewById(R.id.simpleSwitch);
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mRewardedAd != null) {
+       /* if (mRewardedAd != null) {
             Activity activityContext = MainActivity.this;
             mRewardedAd.show(activityContext, new OnUserEarnedRewardListener() {
                 @Override
@@ -162,8 +162,11 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             // Log.d(TAG, "The rewarded ad wasn't ready yet.");
-            super.onBackPressed();
+
         }
+
+        */
+        super.onBackPressed();
     }
 
 }

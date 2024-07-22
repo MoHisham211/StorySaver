@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.model.StoryModel;
 import mo.zain.storysaver.ui.ImageFragment;
@@ -93,13 +89,19 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     public class ImageViewHolder extends
             RecyclerView.ViewHolder{
-        @BindView(R.id.imageButton) ImageButton imageButton;
-        @BindView(R.id.image) ImageView imageView;
-        @BindView(R.id.isVideo) ImageView isVideo;
-        @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
+        ImageButton imageButton;
+        ImageView imageView;
+        ImageView isVideo;
+        ImageButton imageButtonShar;
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+
+            imageButton=itemView.findViewById(R.id.imageButton);
+            imageView=itemView.findViewById(R.id.image);
+            isVideo=itemView.findViewById(R.id.isVideo);
+            imageButtonShar=itemView.findViewById(R.id.imageButtonShar);
+
+
             imageButton.getBackground().setAlpha(175);
             imageButtonShar.getBackground().setAlpha(175);
             imageButton.setOnClickListener(new View.OnClickListener() {

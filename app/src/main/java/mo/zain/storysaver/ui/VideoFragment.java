@@ -23,11 +23,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.File;
@@ -38,8 +33,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.adapter.ImageAdapter;
 import mo.zain.storysaver.adapter.VideoAdapter;
@@ -50,17 +44,15 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class VideoFragment extends Fragment {
 
-    @BindView(R.id.recycleViewImage)
     RecyclerView recyclerView;
-    @BindView(R.id.progress)
     ProgressBar progressBar;
-    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
+ SwipeRefreshLayout swipeRefreshLayout;
     private VideoAdapter videoAdapter;
     private ArrayList<StoryModel> models=new ArrayList<>();
     private Handler handler=new Handler();
     private String lang;
     private SharedPreferences sharedPreferences;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +60,9 @@ public class VideoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_video, container, false);
 
-        ButterKnife.bind(this,view);
+        recyclerView=view.findViewById(R.id.recycleViewImage);
+        progressBar=view.findViewById(R.id.progress);
+        swipeRefreshLayout=view.findViewById(R.id.swiperefresh);
 
         sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
         lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
@@ -78,7 +72,7 @@ public class VideoFragment extends Fragment {
 
         getStatus(lang);
 
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        /*MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
@@ -86,6 +80,8 @@ public class VideoFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+         */
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

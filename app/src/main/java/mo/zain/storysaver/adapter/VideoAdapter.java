@@ -24,8 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.model.StoryModel;
 import mo.zain.storysaver.ui.VideoFragment;
@@ -133,16 +132,19 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHol
 
 
     public class VideoViewHolder extends RecyclerView.ViewHolder{
-        @BindView(R.id.imageButton)
+
         ImageButton imageButton;
-        @BindView(R.id.image)
+
         ImageView imageView;
-        @BindView(R.id.isVideo)
+
         ImageView isVideo;
-        @BindView(R.id.imageButtonShar) ImageButton imageButtonShar;
+      ImageButton imageButtonShar;
         public VideoViewHolder(@NonNull View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            imageButton=itemView.findViewById(R.id.imageButton);
+            imageView=itemView.findViewById(R.id.image);
+            isVideo=itemView.findViewById(R.id.isVideo);
+            imageButtonShar=itemView.findViewById(R.id.imageButtonShar);
 
             imageButton.getBackground().setAlpha(175);
             imageButtonShar.getBackground().setAlpha(175);

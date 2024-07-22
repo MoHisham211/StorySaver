@@ -21,11 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.File;
@@ -36,8 +32,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.adapter.SavedAdapter;
 import mo.zain.storysaver.adapter.VideoAdapter;
@@ -47,11 +41,8 @@ import mo.zain.storysaver.utils.Constants;
 
 public class SavedFragment extends Fragment {
 
-    @BindView(R.id.recycleViewImage)
     RecyclerView recyclerView;
-    @BindView(R.id.progress)
     ProgressBar progressBar;
-    @BindView(R.id.swiperefresh)
     SwipeRefreshLayout swipeRefreshLayout;
 
     private SavedAdapter savedAdapter;
@@ -59,20 +50,25 @@ public class SavedFragment extends Fragment {
     private Handler handler=new Handler();
     private String lang;
     private SharedPreferences sharedPreferences;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_saved, container, false);
-        ButterKnife.bind(this,view);
+
+
+        recyclerView=view.findViewById(R.id.recycleViewImage);
+        progressBar=view.findViewById(R.id.progress);
+        swipeRefreshLayout=view.findViewById(R.id.swiperefresh);
+
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
 
         getStatus();
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        /*MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
@@ -80,6 +76,8 @@ public class SavedFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
+
+         */
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

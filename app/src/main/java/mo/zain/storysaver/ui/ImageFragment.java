@@ -24,11 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
 import java.io.File;
@@ -40,8 +35,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import mo.zain.storysaver.R;
 import mo.zain.storysaver.adapter.ImageAdapter;
 import mo.zain.storysaver.model.StoryModel;
@@ -52,22 +45,27 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ImageFragment extends Fragment {
 
-    @BindView(R.id.recycleViewImage) RecyclerView recyclerView;
-    @BindView(R.id.progress) ProgressBar progressBar;
-    @BindView(R.id.swiperefresh) SwipeRefreshLayout swipeRefreshLayout;
+     RecyclerView recyclerView;
+     ProgressBar progressBar;
+    SwipeRefreshLayout swipeRefreshLayout;
     ImageAdapter imageAdapter;
     ArrayList<StoryModel> models=new ArrayList<>();
     Handler handler=new Handler();
     SharedPreferences sharedPreferences;
     private String lang;
-    private AdView mAdView;
+    //private AdView mAdView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_image, container, false);
-        ButterKnife.bind(this,view);
+
+        recyclerView=view.findViewById(R.id.recycleViewImage);
+        progressBar=view.findViewById(R.id.progress);
+        swipeRefreshLayout=view.findViewById(R.id.swiperefresh);
+
+
         sharedPreferences = getActivity().getSharedPreferences("myKey", MODE_PRIVATE);
         lang = sharedPreferences.getString(Constants.Dirctory_KEY,"W");
 
@@ -75,7 +73,7 @@ public class ImageFragment extends Fragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),2));
         getStatus(lang);
 
-        MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
+        /*MobileAds.initialize(getContext(), new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
@@ -83,7 +81,7 @@ public class ImageFragment extends Fragment {
         mAdView = view.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
+*/
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

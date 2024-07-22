@@ -20,7 +20,7 @@ import android.os.Handler;
 import android.os.storage.StorageManager;
 import android.util.Log;
 
-import com.google.android.gms.ads.rewarded.RewardedAd;
+
 
 import java.util.Objects;
 
